@@ -16,15 +16,15 @@ class ABCRepository(ABC):
         raise NotImplementedError
     
     @abstractmethod
-    def multisex_rooms(self):
+    def get_multisex_rooms(self):
         raise NotImplementedError
     
     @abstractmethod
-    def five_rooms_with_lower_average(self):
+    def get_five_rooms_with_lower_average(self):
         raise NotImplementedError
     
     @abstractmethod
-    def five_rooms_with_higher_differnce(self):
+    def get_five_rooms_with_higher_differnce(self):
         raise NotImplementedError
     
     

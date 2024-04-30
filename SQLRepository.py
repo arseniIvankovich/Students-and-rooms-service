@@ -7,7 +7,7 @@ class SQLRepository(ABCRepository):
     
     def create_room(self,items):
         cursor = self._connection.cursor()
-        cursor.execute("INSERT INTO public.\"Rooms\"(id, room) VALUES (?, ?);", (items['if'], items['name']))
+        cursor.execute("INSERT INTO public.\"Rooms\"(id, room) VALUES (?, ?);", (items['if'], items['room']))
         result = cursor.fetchone()
         return result if result is not None else None
         
@@ -26,19 +26,19 @@ class SQLRepository(ABCRepository):
         result = cursor.fetchone()
         return result if result is not None else None
     
-    def multisex_rooms(self):
+    def get_multisex_rooms(self):
         cursor = self._connection.cursor()
         cursor.execute("")
         result = cursor.fetchone()
         return result if result is not None else None
     
-    def five_rooms_with_lower_average(self):
+    def get_five_rooms_with_lower_average(self):
         cursor = self._connection.cursor()
         cursor.execute("")
         result = cursor.fetchone()
         return result if result is not None else None
     
-    def five_rooms_with_higher_differnce(self):
+    def get_five_rooms_with_higher_differnce(self):
         cursor = self._connection.cursor()
         cursor.execute("")
         result = cursor.fetchone()
