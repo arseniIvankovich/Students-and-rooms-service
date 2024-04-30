@@ -1,6 +1,6 @@
 import SQLRepository
 
-class SimpleService:
+class Service:
     
     def __init__(self, repository) -> None:
         self._repository = repository
@@ -25,4 +25,4 @@ class SimpleService:
     def get_five_rooms_with_higher_differnce(self):
         return self._repository.get_five_rooms_with_higher_differnce()
     
-    
+

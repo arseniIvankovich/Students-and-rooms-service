@@ -27,4 +27,3 @@ class ABCRepository(ABC):
     def get_five_rooms_with_higher_differnce(self):
         raise NotImplementedError
     
-    
