@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 class ABCRepository(ABC):
     
     @abstractmethod
-    def create_room(self, id, name):
+    def create_room(self, items):
         raise NotImplementedError
     
     @abstractmethod
-    def create_student(self, id, name, room, birthday, sex):
+    def create_student(self, items):
         raise NotImplementedError
     
     @abstractmethod
