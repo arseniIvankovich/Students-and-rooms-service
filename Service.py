@@ -24,17 +24,29 @@ class Service:
             return self._repository.insert_students(items)
     
     def get_rooms_students_count(self):
-        return self._repository.get_rooms_students_count()
+        items = self._repository.get_rooms_students_count()
+        list_to_json = [{'room': i[0], 'amount' : i[1]} for i in items]
+        with open('rooms_amount.json','w') as file:
+            json.dump(list_to_json, file, indent=4)   
     
-    def get_rooms_with_different_sexs(self):
-        return self._repository.get_rooms_with_different_sexs()
+    def get_rooms_with_different_sexes(self):
+        items = self._repository.get_rooms_with_different_sexes()
+        list_to_json = [{'room': i[0]} for i in items]
+        with open('rooms_with_different_sexes.json','w') as file:
+            json.dump(list_to_json, file, indent=4) 
     
-    def get_five_rooms_with_lower_average(self):
-        return self._repository.get_five_rooms_with_lower_average()
+    def get_five_rooms_with_least_age_average(self):
+        items = self._repository.get_five_rooms_with_lower_age_average()
+        list_to_json = [{'room': i[0]} for i in items]
+        with open('five_rooms_lower_age_average.json','w') as file:
+            json.dump(list_to_json, file, indent=4) 
     
-    def get_five_rooms_with_higher_differnce(self):
-        return self._repository.get_five_rooms_with_higher_differnce()
+    def get_five_rooms_with_largest_age_differnce(self):
+        items = self._repository.get_five_rooms_with_largest_age_differnce()
+        list_to_json = [{'room': i[0]} for i in items]
+        with open('five_rooms_with_largest_age_differnce.json','w') as file:
+            json.dump(list_to_json, file, indent=4) 
     
 
 simple_service = Service(SQLRepository())
-print(simple_service.get_five_rooms_with_higher_differnce())
+print(simple_service.get_five_rooms_with_largest_age_differnce())

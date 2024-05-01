@@ -24,7 +24,7 @@ class SQLRepository(ABCRepository):
         result = cursor.fetchall()
         return result 
     
-    def get_rooms_with_different_sexs(self):
+    def get_rooms_with_different_sexes(self):
         cursor = self._connection.cursor()
         cursor.execute("SELECT rooms.room FROM \"Rooms\" AS rooms \
                        LEFT JOIN \"Students\" AS students ON students.room = rooms.id \
@@ -32,7 +32,7 @@ class SQLRepository(ABCRepository):
         result = cursor.fetchall()
         return result 
     
-    def get_five_rooms_with_lower_average(self):
+    def get_five_rooms_with_least_age_average(self):
         cursor = self._connection.cursor()
         cursor.execute("SELECT room FROM ( \
                             SELECT rooms.room, ROUND(CAST(AVG(DATE_PART('year', AGE(birthday)))as numeric),2) AS avg_age \
@@ -43,7 +43,7 @@ class SQLRepository(ABCRepository):
         result = cursor.fetchall()
         return result 
     
-    def get_five_rooms_with_higher_differnce(self):
+    def get_five_rooms_with_largest_age_differnce(self):
         cursor = self._connection.cursor()
         cursor.execute("SELECT room FROM ( \
                         SELECT rooms.room, DATE_PART('year', MAX(AGE(birthday))) - DATE_PART('year', MIN(AGE(birthday))) AS max_min_sub_age \
