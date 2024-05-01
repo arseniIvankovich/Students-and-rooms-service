@@ -16,4 +16,3 @@ def connect():
             return connection
     except (psycopg2.DatabaseError, Exception) as e:
         connection_logger.error(e)
-            

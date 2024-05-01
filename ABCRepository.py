@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 class ABCRepository(ABC):
     
     @abstractmethod
-    def create_room(self, items):
+    def insert_rooms(self, items):
         raise NotImplementedError
     
     @abstractmethod
-    def create_student(self, items):
+    def insert_students(self, items):
         raise NotImplementedError
     
     @abstractmethod
@@ -16,7 +16,7 @@ class ABCRepository(ABC):
         raise NotImplementedError
     
     @abstractmethod
-    def get_multisex_rooms(self):
+    def get_rooms_with_different_sexs(self):
         raise NotImplementedError
     
     @abstractmethod
