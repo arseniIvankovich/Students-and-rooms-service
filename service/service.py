@@ -1,12 +1,6 @@
-from db.SQLRepository import SQLRepository
+from db.sql_repository  import SQLRepository
 import json
 from dateutil import parser
-
-def hinted_tuple_hook(obj):
-        if '__tuple__' in obj:
-            return tuple(obj['items'])
-        else:
-            return obj
         
 class Service:
     
@@ -20,7 +14,8 @@ class Service:
     
     def insert_all_students(self):
          with open('input/students.json') as file:
-            items = [(i['id'], str(parser.parse(i['birthday'])), i['name'].split()[0],  i['name'].split()[1], i['room'], i['sex']) for i in json.load(file)]
+            items = [(i['id'], str(parser.parse(i['birthday'])), i['name'].split()[0],  i['name'].split()[1], 
+                      i['room'], i['sex']) for i in json.load(file)]
             return self._repository.insert_students(items)
     
     def get_rooms_students_count(self):
@@ -28,7 +23,7 @@ class Service:
         list_to_json = [{'room': i[0], 'amount' : i[1]} for i in items]
         with open('results/rooms_amount.json','w') as file:
             json.dump(list_to_json, file, indent=4)   
-    
+
     def get_rooms_with_different_sexes(self):
         items = self._repository.get_rooms_with_different_sexes()
         list_to_json = [{'room': i[0]} for i in items]

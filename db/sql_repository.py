@@ -1,7 +1,7 @@
-from db.ABCRepository import ABCRepository
+from db.repository_interface import IRepository
 from db.connection import connect
 
-class SQLRepository(ABCRepository):
+class SQLRepository(IRepository):
     
     def __init__(self):
         self._connection = connect()

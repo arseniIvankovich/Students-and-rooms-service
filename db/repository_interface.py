@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class ABCRepository(ABC):
+class IRepository(ABC):
     
     @abstractmethod
     def insert_rooms(self, items):
