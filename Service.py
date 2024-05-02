@@ -14,12 +14,12 @@ class Service:
         self._repository = repository
         
     def insert_all_rooms (self):
-        with open('rooms.json') as file:
+        with open('input/rooms.json') as file:
             items = [(i['id'], i['name']) for i in json.load(file)]
             return self._repository.insert_rooms(items)
     
     def insert_all_students(self):
-         with open('students.json') as file:
+         with open('input/students.json') as file:
             items = [(i['id'], str(parser.parse(i['birthday'])), i['name'].split()[0],  i['name'].split()[1], i['room'], i['sex']) for i in json.load(file)]
             return self._repository.insert_students(items)
     
