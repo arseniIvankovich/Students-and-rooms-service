@@ -26,25 +26,25 @@ class Service:
     def get_rooms_students_count(self):
         items = self._repository.get_rooms_students_count()
         list_to_json = [{'room': i[0], 'amount' : i[1]} for i in items]
-        with open('rooms_amount.json','w') as file:
+        with open('results/rooms_amount.json','w') as file:
             json.dump(list_to_json, file, indent=4)   
     
     def get_rooms_with_different_sexes(self):
         items = self._repository.get_rooms_with_different_sexes()
         list_to_json = [{'room': i[0]} for i in items]
-        with open('rooms_with_different_sexes.json','w') as file:
+        with open('results/rooms_with_different_sexes.json','w') as file:
             json.dump(list_to_json, file, indent=4) 
     
     def get_five_rooms_with_least_age_average(self):
         items = self._repository.get_five_rooms_with_lower_age_average()
         list_to_json = [{'room': i[0]} for i in items]
-        with open('five_rooms_lower_age_average.json','w') as file:
+        with open('results/five_rooms_lower_age_average.json','w') as file:
             json.dump(list_to_json, file, indent=4) 
     
     def get_five_rooms_with_largest_age_differnce(self):
         items = self._repository.get_five_rooms_with_largest_age_differnce()
         list_to_json = [{'room': i[0]} for i in items]
-        with open('five_rooms_with_largest_age_differnce.json','w') as file:
+        with open('results/five_rooms_with_largest_age_differnce.json','w') as file:
             json.dump(list_to_json, file, indent=4) 
     
 
