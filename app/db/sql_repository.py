@@ -1,5 +1,5 @@
-from db.repository_interface import IRepository
-from db.connection import connect
+from app.db.repository_interface import IRepository
+from app.db.connection import connect
 
 class SQLRepository(IRepository):
     
