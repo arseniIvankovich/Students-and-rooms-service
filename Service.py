@@ -1,4 +1,4 @@
-from SQLRepository import SQLRepository
+from db.SQLRepository import SQLRepository
 import json
 from dateutil import parser
 

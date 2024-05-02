@@ -1,5 +1,5 @@
-from ABCRepository import ABCRepository
-from connection import connect
+from db.ABCRepository import ABCRepository
+from db.connection import connect
 
 class SQLRepository(ABCRepository):
     
