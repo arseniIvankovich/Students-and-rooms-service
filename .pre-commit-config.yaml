@@ -23,14 +23,3 @@ repos:
   rev: 5.12.0
   hooks:
     - id: isort
-      files: "\\.(py)$"
-      args: [--settings-path=pyproject.toml]
-
-- repo: local
-  hooks:
-  - id: pylint
-    name: pylint
-    entry: ./venv/bin/pylint
-    language: system
-    types: [python]
-    args: [--ignore-patterns=venv]

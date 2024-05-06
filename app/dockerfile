@@ -1,9 +1,0 @@
-FROM python:3.10.1
-
-WORKDIR /app
-
-COPY ./requirenments.txt /app.
-RUN pip install -r requirenments.txt
-
-
-
