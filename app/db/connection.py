@@ -12,7 +12,7 @@ import psycopg2
 from dotenv import load_dotenv
 
 load_dotenv()
-config.fileConfig("app/logging.conf", disable_existing_loggers=True, encoding=None)
+config.fileConfig("logging.conf", disable_existing_loggers=True, encoding=None)
 connection_logger = logging.getLogger("connection_logger")
 
 

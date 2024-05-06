@@ -71,3 +71,7 @@ class Service:
         list_to_json = [{"room": i[0]} for i in items]
         with open("results/five_rooms_with_largest_age_differnce.json", "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
+
+    def create_index_on_rooms(self):
+        """_summary_"""
+        return self._repository.create_index_on_rooms()

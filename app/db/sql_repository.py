@@ -10,7 +10,7 @@ import psycopg2
 from db.connection import connect
 from db.repository_interface import IRepository
 
-config.fileConfig("app/logging.conf", disable_existing_loggers=True, encoding=None)
+config.fileConfig("logging.conf", disable_existing_loggers=True, encoding=None)
 queries_logger = logging.getLogger("queries_logger")
 
 
@@ -111,6 +111,32 @@ class SQLRepository(IRepository):
                 )
                 result = cursor.fetchall()
                 return result
+        except psycopg2.Error as e:
+            queries_logger.error(e)
+            return None
+
+    def get_five_rooms_with_largest_age_differnce(self):
+        try:
+            with self._connection.cursor() as cursor:
+                cursor.execute(
+                    "SELECT room FROM ( \
+                                SELECT rooms.room, DATE_PART('year', \
+                                MAX(AGE(birthday))) - DATE_PART('year', MIN(AGE(birthday))) AS max_min_sub_age \
+                                FROM \"Rooms\" AS rooms \
+                                LEFT JOIN \"Students\" AS students ON students.room = rooms.id \
+                                GROUP BY rooms.room ORDER BY max_min_sub_age DESC) AS inner_query LIMIT 5;"
+                )
+                result = cursor.fetchall()
+                return result
+        except psycopg2.Error as e:
+            queries_logger.error(e)
+            return None
+
+    def create_index_on_rooms(self):
+        try:
+            with self._connection.cursor() as cursor:
+                cursor.execute('CREATE INDEX IF NOT EXISTS rooms_index ON "Rooms" (room)')
+                self._connection.commit()
         except psycopg2.Error as e:
             queries_logger.error(e)
             return None
