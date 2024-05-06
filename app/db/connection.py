@@ -12,7 +12,7 @@ import psycopg2
 from dotenv import load_dotenv
 
 load_dotenv()
-config.fileConfig("logging.conf", disable_existing_loggers=True, encoding=None)
+config.fileConfig("app/logging.conf", disable_existing_loggers=True, encoding=None)
 connection_logger = logging.getLogger("connection_logger")
 
 
@@ -32,4 +32,4 @@ def connect():
             return connection
     except (psycopg2.DatabaseError) as e:
         connection_logger.error(e)
-        return None
+        raise e
