@@ -15,7 +15,7 @@ class IRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_rooms_with_different_sexes(self):
+    def get_rooms_with_different_sex(self):
         raise NotImplementedError
 
     @abstractmethod

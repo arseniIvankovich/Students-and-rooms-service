@@ -3,7 +3,7 @@
 *.py[cod]
 
 
-#Byte-compiled 
+#Byte-compiled
 __pycache__/
 
 # Environments
@@ -11,3 +11,4 @@ __pycache__/
 .venv
 env/*
 venv/*
+.vscode

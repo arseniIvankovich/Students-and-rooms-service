@@ -5,18 +5,15 @@
 """
 
 import logging
-import os
 from logging import config
 
 import psycopg2
-from dotenv import load_dotenv
 
-load_dotenv()
 config.fileConfig("logging.conf", disable_existing_loggers=True, encoding=None)
 connection_logger = logging.getLogger("connection_logger")
 
 
-def connect():
+def connect(db_name: str, db_user: str, db_password: str, db_host: str) -> psycopg2.extensions.connection:
     """_summary_
 
     Returns:
@@ -24,12 +21,12 @@ def connect():
     """
     try:
         with psycopg2.connect(
-            database=os.getenv("DATABASE_NAME"),
-            user=os.getenv("DATABASE_USER"),
-            password=os.getenv("DATABASE_PASSWORD"),
-            host=os.getenv("DATABASE_HOST"),
+            database=db_name,
+            user=db_user,
+            password=db_password,
+            host=db_host,
         ) as connection:
             return connection
-    except (psycopg2.DatabaseError) as e:
+    except (psycopg2.DatabaseError, KeyError) as e:
         connection_logger.error(e)
         raise e

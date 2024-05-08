@@ -1,20 +1,44 @@
 version: '3.8'
 services:
+
+  db_test:
+    container_name: db_test
+    env_file:
+      - ./.env
+    image: postgres:16
+    restart: always
+    environment:
+      PGUSER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME_TEST}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME_TEST}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5434:5432"
+
   db:
     container_name: db
     env_file:
       - ./.env
     image: postgres:16
+    restart: always
     environment:
+      POSTGRES_DB: ${DATABASE_NAME}
       PGUSER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
     ports:
       - "5433:5432"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - ./pgdata:/var/lib/postgresql/data
 
   app:
     container_name: app

@@ -4,11 +4,15 @@
         _type_: _description_
 """
 import logging
+import os
 from logging import config
 
 import psycopg2
 from db.connection import connect
 from db.repository_interface import IRepository
+from dotenv import load_dotenv
+
+load_dotenv()
 
 config.fileConfig("logging.conf", disable_existing_loggers=True, encoding=None)
 queries_logger = logging.getLogger("queries_logger")
@@ -21,8 +25,8 @@ class SQLRepository(IRepository):
         IRepository (_type_): _description_
     """
 
-    def __init__(self):
-        self._connection = connect()
+    def __init__(self, connection: psycopg2.extensions.connection):
+        self._connection = connection
 
     def insert_rooms(self, items):
         try:
@@ -33,6 +37,7 @@ class SQLRepository(IRepository):
                 items,
             )
             self._connection.commit()
+            return items
         except psycopg2.Error as e:
             queries_logger.error(e)
             return None
@@ -47,6 +52,7 @@ class SQLRepository(IRepository):
                 items,
             )
             self._connection.commit()
+            return items
         except psycopg2.Error as e:
             queries_logger.error(e)
             return None
@@ -60,13 +66,11 @@ class SQLRepository(IRepository):
                             LEFT JOIN "Students" AS students ON students.room = rooms.id \
                             GROUP BY rooms.room ORDER BY amount DESC;'
             )
-            result = cursor.fetchall()
-            return result
+            return cursor.fetchall()
         except psycopg2.Error as e:
             queries_logger.error(e)
-            return None
 
-    def get_rooms_with_different_sexes(self):
+    def get_rooms_with_different_sex(self):
         try:
             cursor = self._connection.cursor()
             cursor.execute(
@@ -74,28 +78,25 @@ class SQLRepository(IRepository):
                             LEFT JOIN "Students" AS students ON students.room = rooms.id \
                             GROUP BY rooms.room HAVING COUNT(DISTINCT sex) > 1'
             )
-            result = cursor.fetchall()
-            return result
+            return cursor.fetchall()
         except psycopg2.Error as e:
             queries_logger.error(e)
             return None
 
     def get_five_rooms_with_least_age_average(self):
         try:
-            cursor = self._connection.cursor()
-            cursor.execute(
-                'SELECT room FROM ( \
+            with self._connection.cursor() as cursor:
+                cursor.execute(
+                    'SELECT room FROM ( \
                                     SELECT rooms.room, ROUND(CAST(AVG(DATE_PART(\'year\', \
                                     AGE(birthday)))as numeric),2) AS avg_age \
                                     FROM "Rooms" AS rooms \
                                     LEFT JOIN "Students" AS students ON students.room = rooms.id \
                                     GROUP BY rooms.room ORDER BY avg_age \
                                     ) AS inner_query LIMIT 5;'
-            )
-            result = cursor.fetchall()
-            return result
+                )
+            return cursor.fetchall()
         except psycopg2.Error as e:
-            queries_logger.error(e)
             return None
 
     def get_five_rooms_with_largest_age_differnce(self):
@@ -109,25 +110,7 @@ class SQLRepository(IRepository):
                                 LEFT JOIN \"Students\" AS students ON students.room = rooms.id \
                                 GROUP BY rooms.room ORDER BY max_min_sub_age DESC) AS inner_query LIMIT 5;"
                 )
-                result = cursor.fetchall()
-                return result
-        except psycopg2.Error as e:
-            queries_logger.error(e)
-            return None
-
-    def get_five_rooms_with_largest_age_differnce(self):
-        try:
-            with self._connection.cursor() as cursor:
-                cursor.execute(
-                    "SELECT room FROM ( \
-                                SELECT rooms.room, DATE_PART('year', \
-                                MAX(AGE(birthday))) - DATE_PART('year', MIN(AGE(birthday))) AS max_min_sub_age \
-                                FROM \"Rooms\" AS rooms \
-                                LEFT JOIN \"Students\" AS students ON students.room = rooms.id \
-                                GROUP BY rooms.room ORDER BY max_min_sub_age DESC) AS inner_query LIMIT 5;"
-                )
-                result = cursor.fetchall()
-                return result
+                return cursor.fetchall()
         except psycopg2.Error as e:
             queries_logger.error(e)
             return None
@@ -135,7 +118,7 @@ class SQLRepository(IRepository):
     def create_index_on_rooms(self):
         try:
             with self._connection.cursor() as cursor:
-                cursor.execute('CREATE INDEX IF NOT EXISTS rooms_index ON "Rooms" (room)')
+                cursor.execute('CREATE INDEX IF NOT EXISTS rooms_index ON "Rooms" (room);')
                 self._connection.commit()
         except psycopg2.Error as e:
             queries_logger.error(e)
