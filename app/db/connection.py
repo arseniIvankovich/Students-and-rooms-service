@@ -1,23 +1,28 @@
-"""_summary_
-
-    Returns:
-        _type_: _description_
-"""
-
 import logging
 from logging import config
 
 import psycopg2
 
 config.fileConfig("logging.conf", disable_existing_loggers=True, encoding=None)
-connection_logger = logging.getLogger("connection_logger")
+logger = logging.getLogger("connection_logger")
 
 
 def connect(db_name: str, db_user: str, db_password: str, db_host: str) -> psycopg2.extensions.connection:
-    """_summary_
+    """
+    Connects to the specified database and returns the connection object.
+
+    Args:
+        db_name (str): The name of the database.
+        db_user (str): The username for the database.
+        db_password (str): The password for the database user.
+        db_host (str): The location or hostname where the database is hosted.
+
+    Raises:
+        psycopg2.DatabaseError: If there is an error connecting to the database.
+        KeyError: If there is a key error while connecting to the database.
 
     Returns:
-        _type_: _description_
+        psycopg2.extensions.connection: A connection object to the database.
     """
     try:
         with psycopg2.connect(
@@ -28,5 +33,5 @@ def connect(db_name: str, db_user: str, db_password: str, db_host: str) -> psyco
         ) as connection:
             return connection
     except (psycopg2.DatabaseError, KeyError) as e:
-        connection_logger.error(e)
+        logger.error(e)
         raise e

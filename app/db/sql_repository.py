@@ -1,8 +1,7 @@
-"""_summary_
-
-    Returns:
-        _type_: _description_
 """
+SQLRepository class implements IRepository interface for interacting with a PostgreSQL database.
+"""
+
 import logging
 from logging import config
 
@@ -13,20 +12,34 @@ from dotenv import load_dotenv
 load_dotenv()
 
 config.fileConfig("logging.conf", disable_existing_loggers=True, encoding=None)
-queries_logger = logging.getLogger("queries_logger")
+logger = logging.getLogger("queries_logger")
 
 
 class SQLRepository(IRepository):
-    """_summary_
+    """
+    SQLRepository class implements IRepository interface for interacting with a PostgreSQL database.
 
     Args:
-        IRepository (_type_): _description_
+        connection (psycopg2.extensions.connection): A connection to the PostgreSQL database.
     """
 
-    def __init__(self, connection: psycopg2.extensions.connection):
+    def __init__(self, connection: psycopg2.extensions.connection) -> None:
         self._connection = connection
 
-    def insert_rooms(self, items: list):
+    def insert_rooms(self, items: list) -> None:
+        """
+        Inserts room data into the database.
+
+        Args:
+            items (list): A list of tuples containing room IDs and names.
+
+        Returns:
+            None
+
+        Raises:
+            psycopg2.Error: If an error occurs while executing the SQL query.
+        """
+
         try:
             with self._connection.cursor() as cursor:
                 cursor.executemany(
@@ -36,10 +49,24 @@ class SQLRepository(IRepository):
                 )
                 self._connection.commit()
         except psycopg2.Error as e:
-            queries_logger.error(e)
+            logger.error(e)
             raise e
 
-    def insert_students(self, items: list):
+    def insert_students(self, items: list) -> None:
+        """
+        Inserts student data into the database.
+
+        Args:
+            items (list): A list of tuples containing student information including
+                ID, birthday, first name, second name, room, and sex.
+
+        Returns:
+            None
+
+        Raises:
+            psycopg2.Error: If an error occurs while executing the SQL query.
+        """
+
         try:
             with self._connection.cursor() as cursor:
                 cursor.executemany(
@@ -50,10 +77,20 @@ class SQLRepository(IRepository):
                 )
             self._connection.commit()
         except psycopg2.Error as e:
-            queries_logger.error(e)
+            logger.error(e)
             raise e
 
     def get_rooms_students_count(self) -> list[tuple]:
+        """
+        Retrieves the count of students in each room from the database.
+
+        Returns:
+            list[tuple]: A list of tuples containing room IDs and the count of students.
+
+        Raises:
+            psycopg2.Error: If an error occurs while executing the SQL query.
+        """
+
         try:
             with self._connection.cursor() as cursor:
                 cursor.execute(
@@ -64,10 +101,20 @@ class SQLRepository(IRepository):
                 )
                 return cursor.fetchall()
         except psycopg2.Error as e:
-            queries_logger.error(e)
+            logger.error(e)
             raise e
 
     def get_rooms_with_different_sex(self) -> list[tuple]:
+        """
+        etrieves rooms where students of different sexes live from the database.
+
+        Returns:
+            list[tuple]: A list of tuples containing room IDs.
+
+        Raises:
+            psycopg2.Error: If an error occurs while executing the SQL query.
+        """
+
         try:
             with self._connection.cursor() as cursor:
                 cursor.execute(
@@ -77,10 +124,18 @@ class SQLRepository(IRepository):
                 )
                 return cursor.fetchall()
         except psycopg2.Error as e:
-            queries_logger.error(e)
+            logger.error(e)
             raise e
 
     def get_five_rooms_with_least_age_average(self) -> list[tuple]:
+        """
+        Retrieves the five rooms with the least average age of students who lives in the same room
+        from the database.
+
+        Returns:
+            list[tuple]: A list of tuples containing room IDs.
+        """
+
         try:
             with self._connection.cursor() as cursor:
                 cursor.execute(
@@ -109,14 +164,23 @@ class SQLRepository(IRepository):
                 )
                 return cursor.fetchall()
         except psycopg2.Error as e:
-            queries_logger.error(e)
+            logger.error(e)
             raise e
 
-    def create_index_on_rooms(self):
+    def create_index_on_rooms(self) -> None:
+        """
+        Creates an index on the 'Rooms' table on the 'room' field in the database.
+
+        Returns:
+            None
+
+        Raises:
+            psycopg2.Error: If an error occurs while executing the SQL query
+        """
         try:
             with self._connection.cursor() as cursor:
                 cursor.execute('CREATE INDEX IF NOT EXISTS rooms_index ON "Rooms" (room);')
                 self._connection.commit()
         except psycopg2.Error as e:
-            queries_logger.error(e)
+            logger.error(e)
             raise e
