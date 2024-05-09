@@ -22,7 +22,7 @@ def get_connection():
 @pytest.fixture(scope="function", autouse=True)
 def create_tables(connection):
     with connection.cursor() as cursor:
-        cursor.execute(open("test/init.sql", "r").read())
+        cursor.execute(open("init_db/init.sql", "r").read())
     yield
     with connection.cursor() as cursor:
         cursor.execute('DROP TABLE "Students";')
