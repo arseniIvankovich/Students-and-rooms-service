@@ -4,11 +4,9 @@
         _type_: _description_
 """
 import logging
-import os
 from logging import config
 
 import psycopg2
-from db.connection import connect
 from db.repository_interface import IRepository
 from dotenv import load_dotenv
 
@@ -28,7 +26,7 @@ class SQLRepository(IRepository):
     def __init__(self, connection: psycopg2.extensions.connection):
         self._connection = connection
 
-    def insert_rooms(self, items):
+    def insert_rooms(self, items: list):
         try:
             with self._connection.cursor() as cursor:
                 cursor.executemany(
@@ -39,9 +37,9 @@ class SQLRepository(IRepository):
                 self._connection.commit()
         except psycopg2.Error as e:
             queries_logger.error(e)
-            return None
+            raise e
 
-    def insert_students(self, items):
+    def insert_students(self, items: list):
         try:
             with self._connection.cursor() as cursor:
                 cursor.executemany(
@@ -53,9 +51,9 @@ class SQLRepository(IRepository):
             self._connection.commit()
         except psycopg2.Error as e:
             queries_logger.error(e)
-            return None
+            raise e
 
-    def get_rooms_students_count(self):
+    def get_rooms_students_count(self) -> list[tuple]:
         try:
             with self._connection.cursor() as cursor:
                 cursor.execute(
@@ -67,8 +65,9 @@ class SQLRepository(IRepository):
                 return cursor.fetchall()
         except psycopg2.Error as e:
             queries_logger.error(e)
+            raise e
 
-    def get_rooms_with_different_sex(self):
+    def get_rooms_with_different_sex(self) -> list[tuple]:
         try:
             with self._connection.cursor() as cursor:
                 cursor.execute(
@@ -79,9 +78,9 @@ class SQLRepository(IRepository):
                 return cursor.fetchall()
         except psycopg2.Error as e:
             queries_logger.error(e)
-            return None
+            raise e
 
-    def get_five_rooms_with_least_age_average(self):
+    def get_five_rooms_with_least_age_average(self) -> list[tuple]:
         try:
             with self._connection.cursor() as cursor:
                 cursor.execute(
@@ -95,9 +94,9 @@ class SQLRepository(IRepository):
                 )
                 return cursor.fetchall()
         except psycopg2.Error as e:
-            return None
+            raise e
 
-    def get_five_rooms_with_largest_age_differnce(self):
+    def get_five_rooms_with_largest_age_differnce(self) -> list[tuple]:
         try:
             with self._connection.cursor() as cursor:
                 cursor.execute(
@@ -111,7 +110,7 @@ class SQLRepository(IRepository):
                 return cursor.fetchall()
         except psycopg2.Error as e:
             queries_logger.error(e)
-            return None
+            raise e
 
     def create_index_on_rooms(self):
         try:
@@ -120,4 +119,4 @@ class SQLRepository(IRepository):
                 self._connection.commit()
         except psycopg2.Error as e:
             queries_logger.error(e)
-            return None
+            raise e

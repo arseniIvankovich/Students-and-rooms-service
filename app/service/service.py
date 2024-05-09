@@ -4,9 +4,12 @@
         _type_: _description_
 """
 import json
+import os
 
 import db.sql_repository
 from dateutil import parser
+
+os.mkdir("results")
 
 
 class Service:
@@ -15,7 +18,7 @@ class Service:
     def __init__(self, repository: db.sql_repository.SQLRepository) -> None:
         self._repository = repository
 
-    def insert_rooms(self, filepath: str):
+    def insert_rooms(self, filepath: str) -> None:
         """_summary_
 
         Returns:
@@ -25,7 +28,7 @@ class Service:
             items = [(i["id"], i["name"]) for i in json.load(file)]
             return self._repository.insert_rooms(items)
 
-    def insert_students(self, filepath: str):
+    def insert_students(self, filepath: str) -> None:
         """_summary_
 
         Returns:
@@ -46,35 +49,35 @@ class Service:
 
             return self._repository.insert_students(items)
 
-    def get_rooms_students_count(self):
+    def get_rooms_students_count(self) -> list[tuple]:
         """_summary_"""
         items = self._repository.get_rooms_students_count()
-        list_to_json = [{"room": i[0], "amount": i[1]} for i in items]  # type: ignore
-        with open("rooms_amount.json", "w", encoding="utf-8") as file:
+        list_to_json = [{"room": i[0], "amount": i[1]} for i in items]
+        with open("results/rooms_amount.json", "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
         return items
 
-    def get_rooms_with_different_sex(self):
+    def get_rooms_with_different_sex(self) -> list[tuple]:
         """_summary_"""
         items = self._repository.get_rooms_with_different_sex()
-        list_to_json = [{"room": i[0]} for i in items]  # type: ignore
-        with open("rooms_with_different_sex.json", "w", encoding="utf-8") as file:
+        list_to_json = [{"room": i[0]} for i in items]
+        with open("results/rooms_with_different_sex.json", "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
         return items
 
-    def get_five_rooms_with_least_age_average(self):
+    def get_five_rooms_with_least_age_average(self) -> list[tuple]:
         """_summary_"""
         items = self._repository.get_five_rooms_with_least_age_average()
-        list_to_json = [{"room": i[0]} for i in items]  # type: ignore
-        with open("five_rooms_lower_age_average.json", "w", encoding="utf-8") as file:
+        list_to_json = [{"room": i[0]} for i in items]
+        with open("results/five_rooms_lower_age_average.json", "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
         return items
 
-    def get_five_rooms_with_largest_age_differnce(self):
+    def get_five_rooms_with_largest_age_differnce(self) -> list[tuple]:
         """_summary_"""
         items = self._repository.get_five_rooms_with_largest_age_differnce()
-        list_to_json = [{"room": i[0]} for i in items]  # type: ignore
-        with open("five_rooms_with_largest_age_differnce.json", "w", encoding="utf-8") as file:
+        list_to_json = [{"room": i[0]} for i in items]
+        with open("results/five_rooms_with_largest_age_differnce.json", "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
         return items
 
