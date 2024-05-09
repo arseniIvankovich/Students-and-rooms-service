@@ -21,12 +21,12 @@ if __name__ == "__main__":
         db_host=os.environ["DATABASE_HOST"],
     )
     service = Service(SQLRepository(_connect))
-    service.insert_rooms("input/rooms.json")
-    service.insert_students("input/students.json")
+    # service.insert_rooms("input/rooms.json")
+    # service.insert_students("input/students.json")
     service.create_index_on_rooms()
-    service.get_rooms_with_different_sex()
-    service.get_five_rooms_with_largest_age_differnce()
-    service.get_five_rooms_with_least_age_average()
-    service.get_rooms_students_count()
+    service.get_rooms_with_mixedSex_students("rooms_with_different_mixed-sex_students.json")
+    service.get_five_rooms_with_largest_age_differnce("five_rooms_with_largest_age_differnce.json")
+    service.get_five_rooms_with_smallest_age_average("five_rooms_smallest_age_average.json")
+    service.get_rooms_students_count("rooms_amount.json")
     while True:
         time.sleep(5)

@@ -9,8 +9,6 @@ from logging import config
 import db.sql_repository
 from dateutil import parser
 
-os.mkdir("results")
-
 config.fileConfig("logging.conf", disable_existing_loggers=True, encoding=None)
 logger = logging.getLogger("service_logger")
 
@@ -90,10 +88,13 @@ class Service:
             logger.error(f"Error decoding JSON file: {filepath}")
             raise e
 
-    def get_rooms_students_count(self) -> list[tuple]:
+    def get_rooms_students_count(self, filename: str) -> list[tuple]:
         """
         Retrieves the count of students in each room from the database
         and saves the result to a JSON file. Method call SQLRepository method to get data.
+
+        Args:
+            filepath (str): The name of the JSON file by which it will be saved.
 
         Returns:
             list[tuple]: A list of tuples containing room IDs and the count of students.
@@ -101,11 +102,11 @@ class Service:
 
         items = self._repository.get_rooms_students_count()
         list_to_json = [{"room": i[0], "amount": i[1]} for i in items]
-        with open("results/rooms_amount.json", "w", encoding="utf-8") as file:
+        with open(filename, "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
         return items
 
-    def get_rooms_with_different_sex(self) -> list[tuple]:
+    def get_rooms_with_mixedSex_students(self, filename: str) -> list[tuple]:
         """
         Retrieves rooms where students of different sexes live from the database
         and saves the result to a JSON file. Method call SQLRepository method to get data.
@@ -113,44 +114,52 @@ class Service:
         Returns:
             list[tuple]: A list of tuples containing room IDs.
 
+        Args:
+            filepath (str): The name of the JSON file by which it will be saved.
+
         Raises:
             FileNotFoundError: If the specified file path cannot be found.
             psycopg2.Error: If an error occurs while executing the SQL query.
         """
 
-        items = self._repository.get_rooms_with_different_sex()
+        items = self._repository.get_rooms_with_mixedSex_students()
         list_to_json = [{"room": i[0]} for i in items]
-        with open("results/rooms_with_different_sex.json", "w", encoding="utf-8") as file:
+        with open(filename, "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
         return items
 
-    def get_five_rooms_with_least_age_average(self) -> list[tuple]:
+    def get_five_rooms_with_smallest_age_average(self, filename: str) -> list[tuple]:
         """
         Retrieves the five rooms with the least average age of students who lives in the same room
         from the database and saves the result to a JSON file. Method call SQLRepository method to get data.
+
+        Args:
+            filepath (str): The name of the JSON file by which it will be saved.
 
         Returns:
             list[tuple]: A list of tuples containing room IDs.
         """
 
-        items = self._repository.get_five_rooms_with_least_age_average()
+        items = self._repository.get_five_rooms_with_smallest_age_average()
         list_to_json = [{"room": i[0]} for i in items]
-        with open("results/five_rooms_lower_age_average.json", "w", encoding="utf-8") as file:
+        with open(filename, "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
         return items
 
-    def get_five_rooms_with_largest_age_differnce(self) -> list[tuple]:
+    def get_five_rooms_with_largest_age_differnce(self, filename: str) -> list[tuple]:
         """
         Retrieves the five rooms with the largest age difference among students who lives in the same room
         from the database and saves the result to a JSON file. Method call SQLRepository method to get data.
 
+        Args:
+            filepath (str): The name of the JSON file by which it will be saved.
 
         Returns:
             list[tuple]: A list of tuples containing room IDs.
         """
         items = self._repository.get_five_rooms_with_largest_age_differnce()
         list_to_json = [{"room": i[0]} for i in items]
-        with open("results/five_rooms_with_largest_age_differnce.json", "w", encoding="utf-8") as file:
+        with open(filename, "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
         return items
 

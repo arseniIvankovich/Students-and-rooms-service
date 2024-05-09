@@ -104,7 +104,7 @@ class SQLRepository(IRepository):
             logger.error(e)
             raise e
 
-    def get_rooms_with_different_sex(self) -> list[tuple]:
+    def get_rooms_with_mixedSex_students(self) -> list[tuple]:
         """
         etrieves rooms where students of different sexes live from the database.
 
@@ -127,7 +127,7 @@ class SQLRepository(IRepository):
             logger.error(e)
             raise e
 
-    def get_five_rooms_with_least_age_average(self) -> list[tuple]:
+    def get_five_rooms_with_smallest_age_average(self) -> list[tuple]:
         """
         Retrieves the five rooms with the least average age of students who lives in the same room
         from the database.

@@ -15,11 +15,11 @@ class IRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_rooms_with_different_sex(self):
+    def get_rooms_with_mixedSex_students(self):
         raise NotImplementedError
 
     @abstractmethod
-    def get_five_rooms_with_least_age_average(self):
+    def get_five_rooms_with_smallest_age_average(self):
         raise NotImplementedError
 
     @abstractmethod
