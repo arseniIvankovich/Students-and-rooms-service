@@ -19,41 +19,17 @@ def get_connection():
     )
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def create_tables(connection):
     with connection.cursor() as cursor:
         cursor.execute(open("test/init.sql", "r").read())
+    yield
+    with connection.cursor() as cursor:
+        cursor.execute('DROP TABLE "Students";')
+        cursor.execute('DROP TABLE "Rooms";')
+        connection.commit()
 
 
 @pytest.fixture(scope="session", name="service")
 def get_service(connection):
     return Service(SQLRepository(connection))
-
-
-@pytest.fixture(scope="function", autouse=True)
-def clear_tables(connection):
-    with connection.cursor() as cursor:
-        cursor.execute('Truncate "Students";')
-        cursor.execute('TRUNCATE "Rooms" CASCADE;')
-        connection.commit()
-
-
-@pytest.fixture(scope="module", autouse=True)
-def clear_tables_module(connection):
-    with connection.cursor() as cursor:
-        cursor.execute('Truncate "Students";')
-        cursor.execute('TRUNCATE "Rooms" CASCADE;')
-        connection.commit()
-
-
-def pytest_sessionfinish(session, exitstatus):
-    connection = connect(
-        db_name=os.environ["DATABASE_NAME_TEST"],
-        db_password=os.environ["DATABASE_PASSWORD"],
-        db_user=os.environ["DATABASE_USER"],
-        db_host=os.environ["DATABASE_HOST_TEST"],
-    )
-    with connection.cursor() as cursor:
-        cursor.execute('DROP TABLE "Students";')
-        cursor.execute('DROP TABLE "Rooms";')
-        connection.commit()
