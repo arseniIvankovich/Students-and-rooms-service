@@ -18,8 +18,8 @@ if __name__ == "__main__":
         db_host=os.environ["DATABASE_HOST"],
     )
     service = Service(SQLRepository(_connect))
-    service.insert_rooms("input/rooms.json")
-    service.insert_students("input/students.json")
+    # service.insert_rooms("input/rooms.json")
+    # service.insert_students("input/students.json")
     service.create_index_on_rooms()
     service.get_rooms_with_different_sex()
     service.get_five_rooms_with_largest_age_differnce()

@@ -44,3 +44,16 @@ def clear_tables_module(connection):
         cursor.execute('Truncate "Students";')
         cursor.execute('TRUNCATE "Rooms" CASCADE;')
         connection.commit()
+
+
+def pytest_sessionfinish(session, exitstatus):
+    connection = connect(
+        db_name=os.environ["DATABASE_NAME_TEST"],
+        db_password=os.environ["DATABASE_PASSWORD"],
+        db_user=os.environ["DATABASE_USER"],
+        db_host=os.environ["DATABASE_HOST_TEST"],
+    )
+    with connection.cursor() as cursor:
+        cursor.execute('DROP TABLE "Students";')
+        cursor.execute('DROP TABLE "Rooms";')
+        connection.commit()

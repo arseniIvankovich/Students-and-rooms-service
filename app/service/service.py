@@ -68,6 +68,7 @@ class Service:
         list_to_json = [{"room": i[0]} for i in items]  # type: ignore
         with open("five_rooms_lower_age_average.json", "w", encoding="utf-8") as file:
             json.dump(list_to_json, file, indent=4)
+        return items
 
     def get_five_rooms_with_largest_age_differnce(self):
         """_summary_"""

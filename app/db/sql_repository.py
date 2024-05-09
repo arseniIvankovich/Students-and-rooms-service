@@ -30,55 +30,53 @@ class SQLRepository(IRepository):
 
     def insert_rooms(self, items):
         try:
-            cursor = self._connection.cursor()
-            cursor.executemany(
-                'INSERT INTO "Rooms" (id, room) \
-                                VALUES (%s, %s);',
-                items,
-            )
-            self._connection.commit()
-            return items
+            with self._connection.cursor() as cursor:
+                cursor.executemany(
+                    'INSERT INTO "Rooms" (id, room) \
+                                    VALUES (%s, %s);',
+                    items,
+                )
+                self._connection.commit()
         except psycopg2.Error as e:
             queries_logger.error(e)
             return None
 
     def insert_students(self, items):
         try:
-            cursor = self._connection.cursor()
-            cursor.executemany(
-                'INSERT INTO "Students" (id, birthday, \
-                                first_name, second_name, room, sex) \
-                                VALUES (%s, %s, %s, %s, %s, %s);',
-                items,
-            )
+            with self._connection.cursor() as cursor:
+                cursor.executemany(
+                    'INSERT INTO "Students" (id, birthday, \
+                                    first_name, second_name, room, sex) \
+                                    VALUES (%s, %s, %s, %s, %s, %s);',
+                    items,
+                )
             self._connection.commit()
-            return items
         except psycopg2.Error as e:
             queries_logger.error(e)
             return None
 
     def get_rooms_students_count(self):
         try:
-            cursor = self._connection.cursor()
-            cursor.execute(
-                'SELECT rooms.room, COUNT(students.id) AS amount \
-                            FROM "Rooms" AS rooms \
-                            LEFT JOIN "Students" AS students ON students.room = rooms.id \
-                            GROUP BY rooms.room ORDER BY amount DESC;'
-            )
-            return cursor.fetchall()
+            with self._connection.cursor() as cursor:
+                cursor.execute(
+                    'SELECT rooms.room, COUNT(students.id) AS amount \
+                                FROM "Rooms" AS rooms \
+                                LEFT JOIN "Students" AS students ON students.room = rooms.id \
+                                GROUP BY rooms.room ORDER BY amount DESC;'
+                )
+                return cursor.fetchall()
         except psycopg2.Error as e:
             queries_logger.error(e)
 
     def get_rooms_with_different_sex(self):
         try:
-            cursor = self._connection.cursor()
-            cursor.execute(
-                'SELECT rooms.room FROM "Rooms" AS rooms \
-                            LEFT JOIN "Students" AS students ON students.room = rooms.id \
-                            GROUP BY rooms.room HAVING COUNT(DISTINCT sex) > 1'
-            )
-            return cursor.fetchall()
+            with self._connection.cursor() as cursor:
+                cursor.execute(
+                    'SELECT rooms.room FROM "Rooms" AS rooms \
+                                LEFT JOIN "Students" AS students ON students.room = rooms.id \
+                                GROUP BY rooms.room HAVING COUNT(DISTINCT sex) > 1'
+                )
+                return cursor.fetchall()
         except psycopg2.Error as e:
             queries_logger.error(e)
             return None
@@ -95,7 +93,7 @@ class SQLRepository(IRepository):
                                     GROUP BY rooms.room ORDER BY avg_age \
                                     ) AS inner_query LIMIT 5;'
                 )
-            return cursor.fetchall()
+                return cursor.fetchall()
         except psycopg2.Error as e:
             return None
 
