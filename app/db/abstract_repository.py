@@ -1,31 +1,31 @@
 from abc import ABC, abstractmethod
 
 
-class IRepository(ABC):
+class AbstractRepository(ABC):
     @abstractmethod
     def insert_rooms(self, items):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def insert_students(self, items):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def get_rooms_students_count(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def get_rooms_with_mixedSex_students(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def get_five_rooms_with_smallest_age_average(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def get_five_rooms_with_largest_age_differnce(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def create_index_on_rooms(self):
-        raise NotImplementedError
+        pass

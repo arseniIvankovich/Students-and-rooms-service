@@ -37,16 +37,16 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ./app/init_db:/docker-entrypoint-initdb.d
-      - ./pgdata:/var/lib/postgresql/data
+      - ./init_db:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
 
   app:
     container_name: app
     env_file:
       - ./.env
     build:
-      context: ./app
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./app/Dockerfile
     depends_on:
       db:
         condition: service_healthy

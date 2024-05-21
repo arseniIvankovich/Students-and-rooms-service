@@ -9,7 +9,7 @@ import time
 from db.connection import connect
 from db.sql_repository import SQLRepository
 from dotenv import load_dotenv
-from service.service import Service
+from service.service import StudentRoomService
 
 load_dotenv()
 
@@ -20,13 +20,17 @@ if __name__ == "__main__":
         db_user=os.environ["DATABASE_USER"],
         db_host=os.environ["DATABASE_HOST"],
     )
-    service = Service(SQLRepository(_connect))
-    # service.insert_rooms("input/rooms.json")
-    # service.insert_students("input/students.json")
+    service = StudentRoomService(SQLRepository(_connect))
+    service.insert_rooms("input/rooms.json")
+    service.insert_students("input/students.json")
     service.create_index_on_rooms()
-    service.get_rooms_with_mixedSex_students("rooms_with_different_mixed-sex_students.json")
-    service.get_five_rooms_with_largest_age_differnce("five_rooms_with_largest_age_differnce.json")
-    service.get_five_rooms_with_smallest_age_average("five_rooms_smallest_age_average.json")
-    service.get_rooms_students_count("rooms_amount.json")
+    service.get_rooms_with_mixedSex_students_json("rooms_with_different_mixed-sex_students.json")
+    service.get_five_rooms_with_largest_age_differnce_json("five_rooms_with_largest_age_differnce.json")
+    service.get_five_rooms_with_smallest_age_average_json("five_rooms_smallest_age_average.json")
+    service.get_rooms_students_count_json("rooms_amount.json")
+    service.get_rooms_with_mixedSex_students_xml("rooms_with_different_mixed-sex_students.json")
+    service.get_five_rooms_with_largest_age_differnce_xml("five_rooms_with_largest_age_differnce.json")
+    service.get_five_rooms_with_smallest_age_average_xml("five_rooms_smallest_age_average.json")
+    service.get_rooms_students_count_xml("rooms_amount.json")
     while True:
         time.sleep(5)

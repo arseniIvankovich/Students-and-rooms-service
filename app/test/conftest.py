@@ -4,7 +4,7 @@ import pytest
 from db.connection import connect
 from db.sql_repository import SQLRepository
 from dotenv import load_dotenv
-from service.service import Service
+from service.service import StudentRoomService
 
 load_dotenv()
 
@@ -32,4 +32,4 @@ def create_tables(connection):
 
 @pytest.fixture(scope="session", name="service")
 def get_service(connection):
-    return Service(SQLRepository(connection))
+    return StudentRoomService(SQLRepository(connection))

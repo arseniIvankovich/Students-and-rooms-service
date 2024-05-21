@@ -6,7 +6,7 @@ import logging
 from logging import config
 
 import psycopg2
-from db.repository_interface import IRepository
+from db.abstract_repository import AbstractRepository
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,7 +15,7 @@ config.fileConfig("logging.conf", disable_existing_loggers=True, encoding=None)
 logger = logging.getLogger("queries_logger")
 
 
-class SQLRepository(IRepository):
+class SQLRepository(AbstractRepository):
     """
     SQLRepository class implements IRepository interface for interacting with a PostgreSQL database.
 
@@ -149,6 +149,7 @@ class SQLRepository(IRepository):
                 )
                 return cursor.fetchall()
         except psycopg2.Error as e:
+            logger.error(e)
             raise e
 
     def get_five_rooms_with_largest_age_differnce(self) -> list[tuple]:
